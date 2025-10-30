@@ -1,21 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import type { QueryResult, TableInfo } from "./components/types/componentTypes";
+import type {
+  ExecuteResponse,
+  TableInfo,
+} from "./components/types/componentTypes";
 import { fetchTablesAPI, runQueryAPI } from "./services/sqlService";
 import { useSnackbar } from "./context/SnackbarProvider";
 import { Cancel, CheckCircle } from "@mui/icons-material";
 import Sidebar from "./components/Sidebar";
 import Result from "./components/Result";
 import RecentQueries from "./components/RecentQueries";
+import { getStoredQueries, saveQuery } from "./utils/recentQueries";
 
 function App() {
   const [tables, setTables] = useState<string[]>([]);
   const [selectedTable, setSelectedTable] = useState<TableInfo | null>(null);
   const [query, setQuery] = useState<string>("");
-  const [results, setResults] = useState<QueryResult[]>([]);
+  const [results, setResults] = useState<ExecuteResponse | null>(null);
   const [error, setError] = useState<string>("");
   const [tabValue, setTabValue] = useState<number>(0);
-  const [isQuerySuccessful, setQuerySuccessful] = useState<number>(0);
+  const [querySuccessfulIcon, setQuerySuccessfulIcon] = useState<number>(0);
   const [recentQueries, setRecentQueries] = useState<string[]>([]);
 
   const { showMessage } = useSnackbar();
@@ -32,14 +36,14 @@ function App() {
   // mount initilly
   useEffect(() => {
     fetchTables();
-  }, []);
+  }, [fetchTables]);
 
   useEffect(() => {
     const handleQuerySuccessfulIcon = () => {
-      setTimeout(() => setQuerySuccessful(0), 5000);
+      setTimeout(() => setQuerySuccessfulIcon(0), 5000);
     };
     handleQuerySuccessfulIcon();
-  }, [isQuerySuccessful]);
+  }, [querySuccessfulIcon]);
 
   const handleRunQuery = async () => {
     setError("");
@@ -47,10 +51,11 @@ function App() {
 
     try {
       const res = await runQueryAPI(query);
-      setResults(res.data.data || []);
-      console.log("result", res);
+      setResults(res.data);
+      console.log("result", res.data.rows);
+      console.log("result", res.data.columns);
       setTabValue(1);
-      setQuerySuccessful(1);
+      setQuerySuccessfulIcon(1);
 
       // update sidebar
       const qry_head = query.trim().split(" ")[0].toLowerCase();
@@ -59,30 +64,22 @@ function App() {
       }
 
       // store recently used queries
-      const stored = JSON.parse(localStorage.getItem("recentQueries") || "[]");
-      const updated = [
-        query,
-        ...stored.filter((q: string) => q !== query),
-      ].slice(0, 10);
-      localStorage.setItem("recentQueries", JSON.stringify(updated));
+      setRecentQueries(saveQuery(query));
     } catch (err: any) {
       const backendError = err.response?.data?.error;
       const errorMsg = backendError || err.message || "Error executing query";
 
       setError(errorMsg);
       showMessage("Error executing query");
-      setQuerySuccessful(2);
-      setResults([]);
+      setQuerySuccessfulIcon(2);
+      setResults(null);
       setTabValue(0);
     }
   };
 
   useEffect(() => {
-    const storedQueries: string[] = JSON.parse(
-      localStorage.getItem("recentQueries") || "[]"
-    );
-    setRecentQueries(storedQueries);
-  }, [recentQueries]);
+    setRecentQueries(getStoredQueries());
+  }, []);
 
   return (
     <Box display="flex" height="100vh">
@@ -126,9 +123,9 @@ function App() {
               <Button
                 variant="contained"
                 color={
-                  isQuerySuccessful === 1
+                  querySuccessfulIcon === 1
                     ? "success"
-                    : isQuerySuccessful === 2
+                    : querySuccessfulIcon === 2
                     ? "error"
                     : "primary"
                 }
@@ -144,8 +141,8 @@ function App() {
                 alignItems={"center"}
                 justifyContent={"center"}
               >
-                {isQuerySuccessful === 1 && <CheckCircle color="success" />}
-                {isQuerySuccessful === 2 && <Cancel color="error" />}
+                {querySuccessfulIcon === 1 && <CheckCircle color="success" />}
+                {querySuccessfulIcon === 2 && <Cancel color="error" />}
               </Box>
             </Stack>
 

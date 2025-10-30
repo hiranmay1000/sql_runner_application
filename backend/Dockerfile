@@ -1,7 +1,18 @@
+# Use slim Python image
 FROM python:3.11-slim
 
+# Set working directory
 WORKDIR /app
-COPY . .
-RUN pip install -r requirements.txt
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy all backend files
+COPY . .
+
+# Expose port (match app.py)
+EXPOSE 8000
+
+# Run Flask app
+CMD ["python", "app.py"]

@@ -16,9 +16,9 @@ def run_query():
     print(result)
 
     if "error" in result:
-        return result, 400
+        return jsonify(result), 400
 
-    return jsonify({"data": result}), 200
+    return jsonify(result), 200
 
 @app.route("/api/tables", methods=["GET"])
 def tables():

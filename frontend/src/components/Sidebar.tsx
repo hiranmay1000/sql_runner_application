@@ -76,8 +76,8 @@ function Sidebar(props: SidebarPropsType) {
 
                 {tableInfo && (
                   <List disablePadding sx={{ pl: 2 }}>
-                    {tableInfo.columns.map((col) => (
-                      <ListItem key={col.name} sx={{ py: 0 }}>
+                    {tableInfo.columns.map((col, idx) => (
+                      <ListItem key={col} sx={{ py: 0 }}>
                         <ListItemText
                           primary={
                             <Box
@@ -100,7 +100,7 @@ function Sidebar(props: SidebarPropsType) {
                                   flexShrink: 1,
                                 }}
                               >
-                                └ {col.name}
+                                └ {col}
                               </Typography>
 
                               <Typography
@@ -113,7 +113,7 @@ function Sidebar(props: SidebarPropsType) {
                                   flexShrink: 0,
                                 }}
                               >
-                                [{col.type}]
+                                [{tableInfo.types[idx]}]
                               </Typography>
                             </Box>
                           }

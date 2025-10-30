@@ -22,6 +22,7 @@ import type { QueryResult, ResultsPropsType } from "./types/componentTypes";
 import { useSnackbar } from "../context/SnackbarProvider";
 import { fetchTableInfoAPI, fetchTablesAPI } from "../services/sqlService";
 import QueryList from "./QueryList";
+import DataTable from "./DataTable";
 
 function Result(props: ResultsPropsType) {
   const {
@@ -94,12 +95,31 @@ function Result(props: ResultsPropsType) {
     if (isLargeScreen && tabValue === 3) {
       setTabValue(0);
     }
-  }, [isLargeScreen]);
+  }, [isLargeScreen, tabValue, setTabValue]);
+
+  console.log("available table", availableTables);
 
   return (
     <Box mt={4} sx={{ minHeight: "300px" }}>
       {/* Tabs Header */}
-      <Tabs value={tabValue} onChange={handleTabChange}>
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{
+          minHeight: 32,
+          "& .MuiTab-root": {
+            minHeight: 32,
+            padding: "4px 12px",
+            fontSize: "0.8rem",
+            textTransform: "none",
+          },
+          "& .MuiTabs-indicator": {
+            height: 2,
+          },
+        }}
+      >
         <Tab
           label="Output (JSON)"
           icon={<OutputOutlined />}
@@ -120,7 +140,7 @@ function Result(props: ResultsPropsType) {
             <Typography color="error" fontWeight={"Bold"}>
               {"> " + error + "!"}
             </Typography>
-          ) : results && results.length > 0 ? (
+          ) : results ? (
             <Paper
               sx={{
                 p: 2,
@@ -170,31 +190,12 @@ function Result(props: ResultsPropsType) {
       {tabValue === 1 && (
         <Box>
           {/* Show user's query results in table */}
-          {!selectedTable && results && results.length > 0 ? (
+          {!selectedTable && results ? (
             <>
               <Typography variant="h6" gutterBottom>
                 Query Results:
               </Typography>
-              <TableContainer component={Paper} sx={{ mb: 3, maxHeight: 400 }}>
-                <Table size="small" stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      {Object.keys(results[0]).map((col) => (
-                        <TableCell key={col}>{col}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {results.map((row, i) => (
-                      <TableRow key={i}>
-                        {Object.values(row).map((val, j) => (
-                          <TableCell key={j}>{String(val)}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <DataTable columns={results.columns} rows={results.rows} />
             </>
           ) : (
             !selectedTable && <Typography>No entries available.</Typography>
@@ -206,29 +207,10 @@ function Result(props: ResultsPropsType) {
               <Typography variant="h6" gutterBottom>
                 Table Preview:
               </Typography>
-              <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-                <Table size="small" stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      {selectedTable.columns.map((col) => (
-                        <TableCell key={col.name}>
-                          {col.name}{" "}
-                          <small style={{ color: "gray" }}>[{col.type}]</small>
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {selectedTable.sample_data.map((row, i) => (
-                      <TableRow key={i}>
-                        {selectedTable.columns.map((col) => (
-                          <TableCell key={col.name}>{row[col.name]}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <DataTable
+                columns={selectedTable.columns}
+                rows={selectedTable.rows}
+              />
             </>
           )}
         </Box>
@@ -237,47 +219,17 @@ function Result(props: ResultsPropsType) {
       {/* Available Tables Tab */}
       {tabValue === 2 && (
         <Box>
-          <Typography variant="h6" gutterBottom>
-            Available Tables:
-          </Typography>
           {availableTables.length > 0 ? (
             availableTables.map((table, idx) => (
               <Box key={idx} sx={{ mb: 4, p: 1 }}>
                 <Typography sx={{ fontWeight: "bold", mb: 1 }}>
                   {table.name}
                 </Typography>
-                <TableContainer key={idx}>
-                  <Table
-                    size="small"
-                    stickyHeader
-                    sx={{ border: "1px solid #999" }}
-                  >
-                    <TableHead>
-                      <TableRow>
-                        {table.columns.map((col) => (
-                          <TableCell key={col.name}>
-                            {col.name}{" "}
-                            <small style={{ color: "gray" }}>
-                              [{col.type}]
-                            </small>
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {table.sample_data.map((row, i) => (
-                        <TableRow key={i}>
-                          {table.columns.map((col) => (
-                            <TableCell key={col.name}>
-                              {row[col.name]}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <Divider />
+                <DataTable
+                  columns={table.columns}
+                  types={table.types}
+                  rows={table.rows}
+                />
               </Box>
             ))
           ) : (

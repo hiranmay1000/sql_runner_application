@@ -20,15 +20,19 @@ def execute_query(query):
         cursor.execute(query)
         conn.commit()
 
-        columns = [desc[0] for desc in cursor.description] if cursor.description else []
-
-        results = [OrderedDict(zip(columns, row)) for row in cursor.fetchall()]
-
-        return results
+        if cursor.description:
+            columns = [desc[0] for desc in cursor.description]
+            rows = cursor.fetchall()
+            results = [list(row) for row in rows]
+            print(columns)
+            return {"columns": columns, "rows": results}
+        else:
+            return {"message": "Query executed successfully."}
     except sqlite3.Error as e:
         return {"error": str(e)}
     finally:
         close_db_connection(conn)
+
 
 
 def get_table_names():
@@ -39,15 +43,30 @@ def get_table_names():
     close_db_connection(conn)
     return tables
 
+
+# Index	            Column	                        Description
+# 0	                cid	                            Column ID (integer)
+# 1	                name	                        Column name
+# 2	                type	                        Declared SQL type (TEXT, INTEGER, etc.)
+# 3	                notnull	                        1 if NOT NULL, 0 otherwise
+# 4	                dflt_value	                     Default value
+# 5	                pk	                            1 if part of primary key
+
 def get_table_info(table_name):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
+        # Fetch columns and types
         cursor.execute(f"PRAGMA table_info({table_name});")
-        columns = [{"name": row[1], "type": row[2]} for row in cursor.fetchall()]
+        cols = cursor.fetchall()
+        columns_names = [row[1] for row in cols]
+        columns_types = [row[2] for row in cols]
+
+        # Fetch data
         cursor.execute(f"SELECT * FROM {table_name} LIMIT 5;")
-        sample_data = [OrderedDict(zip(row.keys(), row)) for row in cursor.fetchall()] # this preserves column order -> OrderedDict
-        return {"columns": columns, "sample_data": sample_data}
+        rows = cursor.fetchall()
+        row_results = [list(row) for row in rows]
+        return {"columns": columns_names, "types": columns_types, "rows": row_results}
     except sqlite3.Error as e:
         return {"error": str(e)}
     finally:
