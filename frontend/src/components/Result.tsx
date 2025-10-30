@@ -4,18 +4,14 @@ import {
   Divider,
   Typography,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Tabs,
   Tab,
   IconButton,
   Tooltip,
   useMediaQuery,
   useTheme,
+  CircularProgress,
+  Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import type { QueryResult, ResultsPropsType } from "./types/componentTypes";
@@ -35,6 +31,7 @@ function Result(props: ResultsPropsType) {
   } = props;
   const [tables, setTables] = useState<string[]>();
   const [availableTables, setAvailableTables] = useState<QueryResult[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { showMessage } = useSnackbar();
 
@@ -61,7 +58,9 @@ function Result(props: ResultsPropsType) {
         try {
           const response = await fetchTablesAPI();
           setTables(response.data.tables);
-        } catch (error) {}
+        } catch (error) {
+          console.error(error);
+        }
       };
 
       fetchAllTableDetails();
@@ -71,6 +70,7 @@ function Result(props: ResultsPropsType) {
   useEffect(() => {
     if (tabValue === 2 && tables?.length) {
       const fetchAllTableDetails = async () => {
+        setLoading(true);
         try {
           const allDetails = await Promise.all(
             tables.map(async (table) => {
@@ -84,6 +84,8 @@ function Result(props: ResultsPropsType) {
           setAvailableTables(allDetails);
         } catch (error) {
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -198,7 +200,9 @@ function Result(props: ResultsPropsType) {
               <DataTable columns={results.columns} rows={results.rows} />
             </>
           ) : (
-            !selectedTable && <Typography>No entries available.</Typography>
+            !selectedTable && (
+              <Typography fontWeight={"bold"}>Nothing to display.</Typography>
+            )
           )}
 
           {/* Show selected table preview */}
@@ -219,7 +223,12 @@ function Result(props: ResultsPropsType) {
       {/* Available Tables Tab */}
       {tabValue === 2 && (
         <Box>
-          {availableTables.length > 0 ? (
+          {loading ? (
+            <Stack direction={"row"}>
+              <CircularProgress size={24} />
+              <Typography sx={{ ml: 2 }}>Loading...</Typography>
+            </Stack>
+          ) : availableTables.length > 0 ? (
             availableTables.map((table, idx) => (
               <Box key={idx} sx={{ mb: 4, p: 1 }}>
                 <Typography sx={{ fontWeight: "bold", mb: 1 }}>
@@ -233,7 +242,9 @@ function Result(props: ResultsPropsType) {
               </Box>
             ))
           ) : (
-            <Typography>No available table found!</Typography>
+            <Typography fontWeight={"bold"}>
+              No available table found!
+            </Typography>
           )}
         </Box>
       )}
