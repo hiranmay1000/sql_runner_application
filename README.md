@@ -55,14 +55,10 @@ Open a new terminal and run:
 
 \***\*i. Using regular method 🧩\*\***
 
-```bash
-cd ./sql_runner_application/frontend
-npm install
-```
-
 Create a **.env** file in the frontend directory:
 
-```
+```bash
+cd ./sql_runner_application/frontend
 touch .env
 ```
 
@@ -72,7 +68,11 @@ Paste backend uri for api communication
 REACT_APP_API_BASE=http://127.0.0.1:8000/api
 ```
 
-If your backend runs on port 5000, replace 8000 with 5000.
+If your backend runs on different port then change it.
+
+```
+npm install
+```
 
 Start the React app:
 
