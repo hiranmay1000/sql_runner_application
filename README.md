@@ -24,6 +24,7 @@ Make sure Docker and Docker Compose are installed.
 From the project root (`sql_runner_application`):
 
 ```
+cd ./frontend
 touch .env
 ```
 
@@ -36,7 +37,6 @@ REACT_APP_API_BASE=http://127.0.0.1:8000/api
 Install node modules for frontend:
 
 ```
-cd frontend
 npm install
 ```
 
@@ -60,16 +60,23 @@ docker-compose down
 
 **_ii. Production Mode_**
 
-For deployment, use your `.env.production` file:
+From the project root (`sql_runner_application`):
 
-```
-docker-compose --env-file .env.production up --build
+```bash
+cd ./frontend
+touch .env.production
 ```
 
-Your `.env.production` should include the production API endpoint:
+Paste this line inside .env:
 
 ```
 REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api
+```
+
+For deployment, use your `.env.production` file:
+
+```
+docker-compose --env-file ./frontend/.env.production up --build
 ```
 
 ## 🧩 2. Manual Setup (Without Docker)
