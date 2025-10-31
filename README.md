@@ -23,6 +23,25 @@ Make sure Docker and Docker Compose are installed.
 
 From the project root (`sql_runner_application`):
 
+```
+touch .env
+```
+
+Paste this line inside .env:
+
+```
+REACT_APP_API_BASE=http://127.0.0.1:8000/api
+```
+
+Install node modules for frontend:
+
+```
+cd frontend
+npm install
+```
+
+Start docker:
+
 ```bash
 docker-compose up --build
 ```
@@ -67,7 +86,7 @@ python app.py
 
 The backend runs at:
 
-`http://127.0.0.1:8136  OR  http://127.0.0.1:5000`
+`http://127.0.0.1:8000  OR  http://127.0.0.1:5000`
 
 You should see:
 
@@ -78,11 +97,11 @@ On Console:
 ```
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:8136    # copy this url and paste into your .env REACT_APP_API_BASE = url
- * Running on http://172.21.92.249:8136
+ * Running on http://127.0.0.1:8000    # copy this url and paste into your .env REACT_APP_API_BASE = url
+ * Running on http://172.21.92.249:8000
 ```
 
-The backend will start at `http://127.0.0.1:8136` \***\*copy the url\*\***
+The backend will start at `http://127.0.0.1:8000` \***\*copy the url\*\***
 
 ✅ Your backend is working correctly!
 
@@ -102,11 +121,9 @@ touch .env
 
 Paste this line inside .env:
 
-````
+```
 REACT_APP_API_BASE=http://127.0.0.1:8000/api
-```bash
-REACT_APP_API_BASE=http://127.0.0.1:8136/api
-````
+```
 
 If your backend runs on a different port (e.g., 5000), replace 8000 accordingly.
 
