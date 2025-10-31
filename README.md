@@ -26,15 +26,26 @@ cd sql_runner_application
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ```
 
-The backend will start at `http://127.0.0.1:8000` \***\*copy the url\*\***
+You should see:
 
-You should see `{ "message": "SQL Runner API is running!" }`
+On Browser: `{ "message": "SQL Runner API is running!" }`
+
+On Console:
+
+```
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8136    # copy this url and paste into your .env REACT_APP_API_BASE = url
+ * Running on http://172.21.92.249:8136
+```
+
+The backend will start at `http://127.0.0.1:8136` \***\*copy the url\*\***
 
 ✅ Your backend is working correctly!
 
