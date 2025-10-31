@@ -65,7 +65,7 @@ touch .env
 Paste backend uri for api communication
 
 ```bash
-REACT_APP_API_BASE=http://127.0.0.1:8000/api
+REACT_APP_API_BASE=http://127.0.0.1:8136/api
 ```
 
 If your backend runs on different port then change it.
