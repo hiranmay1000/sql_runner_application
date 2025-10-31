@@ -67,7 +67,7 @@ python app.py
 
 The backend runs at:
 
-`http://127.0.0.1:8000  OR  http://127.0.0.1:5000`
+`http://127.0.0.1:8136  OR  http://127.0.0.1:5000`
 
 You should see:
 
@@ -102,9 +102,11 @@ touch .env
 
 Paste this line inside .env:
 
-```
+````
 REACT_APP_API_BASE=http://127.0.0.1:8000/api
-```
+```bash
+REACT_APP_API_BASE=http://127.0.0.1:8136/api
+````
 
 If your backend runs on a different port (e.g., 5000), replace 8000 accordingly.
 
