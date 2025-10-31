@@ -18,7 +18,7 @@ Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/sql_runner_application.git
+git clone https://github.com/hiranmay1000/sql_runner_application.git
 cd sql_runner_application
 ```
 
@@ -32,28 +32,57 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The backend will start at `http://127.0.0.1:8000` || `http://127.0.0.1:5000`
+The backend will start at `http://127.0.0.1:8000` \***\*copy the url\*\***
 
 You should see `{ "message": "SQL Runner API is running!" }`
 
+✅ Your backend is working correctly!
+
 ### 3. Frontend Setup (React)
 
+Open a new terminal and run:
+
+\***\*i. Using regular method 🧩\*\***
+
 ```bash
-cd ../frontend
+cd ./sql_runner_application/frontend
 npm install
 ```
 
-Create a .env file in the frontend directory:
+Create a **.env** file in the frontend directory:
 
-```bash
-REACT_APP_API_BASE=http://127.0.0.1:8000/api || http://127.0.0.1:5000/api
+```
+touch .env
 ```
 
-Then start the React app:
+Paste backend uri for api communication
+
+```bash
+REACT_APP_API_BASE=http://127.0.0.1:8000/api
+```
+
+If your backend runs on port 5000, replace 8000 with 5000.
+
+Start the React app:
 
 ```bash
 npm start
-App runs at http://localhost:3000
+```
+
+Your app will run at 👉 http://localhost:3000
+
+\***\*i. Using docker (optional) 🧩\*\***
+
+Run in Local Environment:
+
+```bash
+docker-compose up -- build
+```
+
+Run In Production
+
+```bash
+docker-compose --env-file .env.production up --build
 ```
 
 ### Test Locally
