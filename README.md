@@ -91,21 +91,14 @@ Install dependencies (frontend + backend):
 
 ```bash
 npm install
-cd frontend && npm install && cd.. && cd backend pip install -r requirements.txt && cd..
+cd frontend && npm install && cd ../backend && pip install -r requirements.txt && cd ..
 ```
 
 Create a .env file for API communication:
 
 ```
-cd frontend
-touch .env
-cd..
-```
+cd frontend && touch .env && echo "REACT_APP_API_BASE=http://127.0.0.1:8000/api" > .env && cd ..
 
-Paste this line inside .env:
-
-```
-REACT_APP_API_BASE=http://127.0.0.1:8000/api
 ```
 
 Run both servers together:
@@ -121,9 +114,9 @@ Once started:
 - Backend API → http://127.0.0.1:8000
   (or 5000 depending on setup)
 
-✅ Both servers are running...
+✅ Both servers are running, your application is ready to serve.
 
-⚠️ Note for Windows Users
+### ⚠️ Note for Windows Users
 
 Ensure that Python 3.x is installed and added to your PATH.
 You can verify this by running:
