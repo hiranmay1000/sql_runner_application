@@ -81,7 +81,73 @@ docker-compose --env-file .env.production up --build
 
 ## 🧩 2. Manual Setup (Without Docker)
 
-### i. Backend Setup (Flask + SQLite)
+Open your terminal and navigate to the project root:
+
+```bash
+cd ./sql_runner_application
+```
+
+Install dependencies (frontend + backend):
+
+```bash
+npm install
+cd frontend && npm install && cd.. && cd backend pip install -r requirements.txt && cd..
+```
+
+Create a .env file for API communication:
+
+```
+cd frontend
+touch .env
+cd..
+```
+
+Paste this line inside .env:
+
+```
+REACT_APP_API_BASE=http://127.0.0.1:8000/api
+```
+
+Run both servers together:
+
+```bash
+npm run dev
+```
+
+Once started:
+
+- Frontend → http://localhost:3000
+
+- Backend API → http://127.0.0.1:8000
+  (or 5000 depending on setup)
+
+✅ Both servers are running...
+
+⚠️ Note for Windows Users
+
+Ensure that Python 3.x is installed and added to your PATH.
+You can verify this by running:
+
+```bash
+python --version
+```
+
+or
+
+```bash
+python3 --version
+```
+
+or
+
+```bash
+py --version
+```
+
+If you don’t have Python installed, download it from [python.org/downloads](https://www.python.org/downloads/)
+before running `npm run dev`.
+
+You can create virtual environment (optional)
 
 ```bash
 cd ./sql_runner_application/backend
