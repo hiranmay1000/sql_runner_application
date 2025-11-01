@@ -1,17 +1,24 @@
-# Node.js
-frontend/node_modules/
-frontend/build/
-frontend/.env
-frontend/.env.production
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Python
-backend/**pycache**/
-backend/_.pyc
-backend/.venv/
-backend/env/
-_.sqlite3
+# production
+/build
 
-# General
+# misc
 .DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# general
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel
 .env
 .env.production
+./frontend/.env
+./frontend/.env.production
