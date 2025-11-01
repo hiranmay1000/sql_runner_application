@@ -24,14 +24,8 @@ Make sure Docker and Docker Compose are installed.
 From the project root (`sql_runner_application`):
 
 ```
-cd ./frontend
-touch .env
-```
-
-Paste this line inside .env:
-
-```
-REACT_APP_API_BASE=http://127.0.0.1:8000/api
+cd frontend &&
+touch .env && echo "REACT_APP_API_BASE=http://127.0.0.1:8000/api" > .env
 ```
 
 Install node modules for frontend:
@@ -62,15 +56,10 @@ docker-compose down
 
 From the project root (`sql_runner_application`):
 
-```bash
-cd ./frontend
-touch .env.production
 ```
-
-Paste this line inside .env:
-
-```
-REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api
+cd frontend &&
+touch .env.production &&
+echo "REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api" > .env.production
 ```
 
 For deployment, use your `.env.production` file:
@@ -83,15 +72,28 @@ docker-compose --env-file .env.production up --build
 
 Open your terminal and navigate to the project root:
 
-```bash
-cd ./sql_runner_application
-```
+**⚠️ Note:** Users
+Ensure that Python 3.x is installed and added to your PATH. You can verify this by running: `python --version`, `python3 --version`, `py --version`
+If you don’t have Python installed, download it from [python.org/downloads](https://www.python.org/downloads/) now.
 
-Install dependencies (frontend + backend):
+Install dependencies (frontend):
 
 ```bash
 npm install
-cd frontend && npm install && cd ../backend && pip install -r requirements.txt && cd ..
+cd frontend && npm install && cd ../backend
+```
+
+You can create virtual environment **(optional)**
+
+```bash
+python -m venv .venv              # create hidden virtual environment
+source .venv/bin/activate         # on Windows: .venv\Scripts\activate
+```
+
+Install dependencies **(backend)**
+
+```bash
+pip install -r requirements.txt && cd ..
 ```
 
 Create a .env file for API communication:
@@ -116,46 +118,6 @@ Once started:
 
 ✅ Both servers are running, your application is ready to serve.
 
-### ⚠️ Note for Windows Users
-
-Ensure that Python 3.x is installed and added to your PATH.
-You can verify this by running:
-
-```bash
-python --version
-```
-
-or
-
-```bash
-python3 --version
-```
-
-or
-
-```bash
-py --version
-```
-
-If you don’t have Python installed, download it from [python.org/downloads](https://www.python.org/downloads/)
-before running `npm run dev`.
-
-You can create virtual environment (optional)
-
-```bash
-cd ./sql_runner_application/backend
-python -m venv .venv              # create hidden virtual environment
-source .venv/bin/activate         # on Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
-```
-
-The backend runs at:
-
-`http://127.0.0.1:8000  OR  http://127.0.0.1:5000`
-
-You should see:
-
 On Browser: `{ "message": "SQL Runner API is running!" }`
 
 On Console:
@@ -171,36 +133,7 @@ The backend will start at `http://127.0.0.1:8000` \***\*copy the url\*\***
 
 ✅ Your backend is working correctly!
 
-### ii. Frontend Setup (React)
-
-Open a new terminal:
-
-```
-cd ./sql_runner_application/frontend
-```
-
-Create a .env file for API communication:
-
-```
-touch .env
-```
-
-Paste this line inside .env:
-
-```
-REACT_APP_API_BASE=http://127.0.0.1:8000/api
-```
-
-If your backend runs on a different port (e.g., 5000), replace 8000 accordingly.
-
-Then install and run the app:
-
-```
-npm install
-npm start
-```
-
-Your frontend will be available at 👉 `http://localhost:3000`
+---
 
 ### Test Locally
 
