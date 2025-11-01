@@ -223,7 +223,7 @@ function Result(props: ResultsPropsType) {
       {/* Available Tables Tab */}
       {tabValue === 2 && (
         <Box>
-          {loading ? (
+          {loading || !availableTables ? (
             <Stack direction={"row"}>
               <CircularProgress size={24} />
               <Typography sx={{ ml: 2 }}>Loading...</Typography>
