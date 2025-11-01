@@ -76,7 +76,7 @@ REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api
 For deployment, use your `.env.production` file:
 
 ```
-docker-compose --env-file ./frontend/.env.production up --build
+docker-compose --env-file .env.production up --build
 ```
 
 ## 🧩 2. Manual Setup (Without Docker)
