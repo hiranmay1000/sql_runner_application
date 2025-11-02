@@ -1,8 +1,13 @@
 import sqlite3
-import json
+import os
+from dotenv import load_dotenv
 from collections import OrderedDict
 
-DATABASE_URL = "sql_runner.db"
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the database URL (fallback to default if not set)
+DATABASE_URL = os.getenv("DATABASE_URL", "sql_runner.db")
 
 def get_db_connection():
     conn = sqlite3.connect(DATABASE_URL)
