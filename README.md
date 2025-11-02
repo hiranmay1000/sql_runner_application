@@ -19,21 +19,21 @@ Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 
 Make sure Docker and Docker Compose are installed & running.
 
-**_i. LOCAL Development_**
+> ### **LOCAL Development**
 
 From the project root (`sql_runner_application`):
 
-Environment Variables Setup (.env Files)
+Create a .env file for API communication **(frontend & backend)**:
 
 ```
-# Create backend .env
+#---- Create backend .env
 cd backend && cat > .env <<EOF
 DATABASE_URL=sql_runner.db
 FLASK_ENV=production
 PORT=8000
 EOF
 
-# Create frontend .env
+#---- Create frontend .env
 cd ../frontend && cat > .env <<EOF
 REACT_APP_API_BASE=http://127.0.0.1:8000/api
 EOF
@@ -54,9 +54,9 @@ docker-compose up --build
 
 This command builds both backend and frontend containers and starts them together.
 
-Backend: http://127.0.0.1:8000
+- Backend: http://127.0.0.1:8000
 
-Frontend: http://localhost:3000
+- Frontend: http://localhost:3000
 
 You can stop the containers anytime with:
 
@@ -64,25 +64,31 @@ You can stop the containers anytime with:
 docker-compose down
 ```
 
-**_ii. PRODUCTION Development_**
+> ### **PRODUCTION Development**
 
 From the project root (`sql_runner_application`):
 
 ```
-# Create backend .env.production
+#---- Create backend .env.production
 cd backend && cat > .env.production <<EOF
 DATABASE_URL=sql_runner.db
 FLASK_ENV=production
 PORT=8000
 EOF
 
-# Create frontend .env.production
+#---- Create frontend .env.production
 cd frontend &&
 touch .env.production &&
 echo "REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api" > .env.production
 ```
 
-For deployment, use your `.env.production` file:
+Install node modules for frontend:
+
+```
+npm install
+```
+
+Start docker, for deployment, use your `.env.production` file:
 
 ```
 docker-compose --env-file .env.production up --build
@@ -116,10 +122,21 @@ Install dependencies **(backend)**
 pip install -r requirements.txt && cd ..
 ```
 
-Create a .env file for API communication:
+Create a .env file for API communication **(frontend & backend)**:
 
 ```
-cd frontend && touch .env && echo "REACT_APP_API_BASE=http://127.0.0.1:8000/api" > .env && cd ..
+#---- Create backend .env
+cd backend && cat > .env <<EOF
+DATABASE_URL=sql_runner.db
+FLASK_ENV=production
+PORT=8000
+EOF
+
+#---- Create frontend .env
+cd ../frontend && cat > .env <<EOF
+REACT_APP_API_BASE=http://127.0.0.1:8000/api
+EOF
+cd ..
 
 ```
 
