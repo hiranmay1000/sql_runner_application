@@ -44,7 +44,10 @@ if __name__ == "__main__":
 
     # Detect environment automatically
     flask_env = os.environ.get("FLASK_ENV", "production")
-    debug_mode = os.environ.get("DEBUG", "False").lower() == "true"
+    if(flask_env == "production"):
+        debug_mode = False
+    else:     
+        debug_mode = True
     port = int(os.environ.get("PORT", 8000))
 
     # Override behavior if in production (safe guard)
