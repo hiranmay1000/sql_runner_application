@@ -99,8 +99,6 @@ function Result(props: ResultsPropsType) {
     }
   }, [isLargeScreen, tabValue, setTabValue]);
 
-  console.log("available table", availableTables);
-
   return (
     <Box mt={4} sx={{ minHeight: "300px" }}>
       {/* Tabs Header */}
