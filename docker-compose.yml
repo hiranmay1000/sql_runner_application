@@ -9,11 +9,11 @@ services:
       FLASK_ENV: production
       PORT: 8000
       DEBUG: "False"
-      DATABASE_URL: sqlite:///sql_runner.db
+      DATABASE_URL: app/sql_runner.db
     volumes:
       - ./backend:/app
     command: >
-      sh -c "python app.py"
+      sh -c "python app/app.py"
 
   frontend:
     build:
