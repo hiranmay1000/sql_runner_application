@@ -37,6 +37,21 @@ def root():
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 8000 | 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    from dotenv import load_dotenv
+
+    # Load .env if available
+    load_dotenv()
+
+    # Detect environment automatically
+    flask_env = os.environ.get("FLASK_ENV", "production")
+    debug_mode = os.environ.get("DEBUG", "False").lower() == "true"
+    port = int(os.environ.get("PORT", 8000))
+
+    # Override behavior if in production (safe guard)
+    if flask_env == "production":
+        debug_mode = False 
+
+    print(f"🚀 Starting Flask server in {flask_env} mode on port {port} (debug={debug_mode})")
+
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
 
