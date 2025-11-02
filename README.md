@@ -31,7 +31,6 @@ cd backend && cat > .env <<EOF
 DATABASE_URL=sql_runner.db
 FLASK_ENV=production
 PORT=8000
-DEBUG=true
 EOF
 
 # Create frontend .env
@@ -70,6 +69,14 @@ docker-compose down
 From the project root (`sql_runner_application`):
 
 ```
+# Create backend .env.production
+cd backend && cat > .env.production <<EOF
+DATABASE_URL=sql_runner.db
+FLASK_ENV=production
+PORT=8000
+EOF
+
+# Create frontend .env.production
 cd frontend &&
 touch .env.production &&
 echo "REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api" > .env.production
