@@ -9,7 +9,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.db
+# *.db. <- I will uncomment it when multi-user features will be integrated
 instance/
 .venv/
 venv/
