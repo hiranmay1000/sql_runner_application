@@ -17,15 +17,28 @@ Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 
 ## 🐳 1. Run Entire App Using Docker
 
-Make sure Docker and Docker Compose are installed.
+Make sure Docker and Docker Compose are installed & running.
 
-**_i. Local Development_**
+**_i. LOCAL Development_**
 
 From the project root (`sql_runner_application`):
 
+Environment Variables Setup (.env Files)
+
 ```
-cd frontend &&
-touch .env && echo "REACT_APP_API_BASE=http://127.0.0.1:8000/api" > .env
+# Create backend .env
+cd backend && cat > .env <<EOF
+DATABASE_URL=sql_runner.db
+FLASK_ENV=production
+PORT=8000
+DEBUG=true
+EOF
+
+# Create frontend .env
+cd ../frontend && cat > .env <<EOF
+REACT_APP_API_BASE=http://127.0.0.1:8000/api
+EOF
+
 ```
 
 Install node modules for frontend:
@@ -52,7 +65,7 @@ You can stop the containers anytime with:
 docker-compose down
 ```
 
-**_ii. Production Mode_**
+**_ii. PRODUCTION Development_**
 
 From the project root (`sql_runner_application`):
 
@@ -153,9 +166,14 @@ SELECT * FROM table_name LIMIT 5;
 
 ### ☁️ Deployment
 
-- Backend: Render
+1. Production Deployment
+   Backend **_(Render)_**
 
-- Frontend: Vercel
+- Deployed at → https://sql-runner-application.onrender.com
+
+2. Frontend **_(Vercel)_**
+
+- Deployed at → https://sql-runner-application.vercel.app
 
 For production .env:
 
