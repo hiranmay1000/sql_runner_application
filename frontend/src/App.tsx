@@ -28,8 +28,10 @@ function App() {
     try {
       const response = await fetchTablesAPI();
       setTables(response.data.tables);
-    } catch (error) {
-      console.error("Error fetching tables:", error);
+    } catch (err: any) {
+      const backendError = err.response?.data?.error;
+      const errorMsg = backendError || err.message || "Error fetching tables";
+      setError(errorMsg);
     }
   }, []);
 
