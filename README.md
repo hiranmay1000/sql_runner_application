@@ -31,7 +31,7 @@ Create a .env file for API communication **(frontend & backend)**:
 #---- Create backend .env
 cd backend && cat > .env <<EOF
 DATABASE_URL=sql_runner.db
-FLASK_ENV=production
+FLASK_ENV=development
 PORT=8000
 EOF
 
@@ -79,7 +79,7 @@ PORT=8000
 EOF
 
 #---- Create frontend .env.production
-cd frontend &&
+cd ../frontend &&
 touch .env.production &&
 echo "REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api" > .env.production
 ```
