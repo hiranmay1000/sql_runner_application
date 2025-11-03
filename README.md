@@ -3,6 +3,8 @@
 A full-stack web app that lets users execute SQL queries directly from a browser.  
 Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 
+App is live on: https://sqlrunneronline.vercel.app/
+
 ---
 
 ## 🚀 Features
@@ -17,26 +19,32 @@ Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 
 ## 🐳 1. Run Entire App Using Docker
 
-Make sure Docker and Docker Compose are installed.
+Make sure Docker and Docker Compose are installed & running.
 
-**_i. Local Development_**
+> ### **LOCAL Development**
 
 From the project root (`sql_runner_application`):
 
-```
-touch .env
-```
-
-Paste this line inside .env:
+Create a .env file for API communication **(frontend & backend)**:
 
 ```
+#---- Create backend .env
+cd backend && cat > .env <<EOF
+DATABASE_URL=sql_runner.db
+FLASK_ENV=development
+PORT=8000
+EOF
+
+#---- Create frontend .env
+cd ../frontend && cat > .env <<EOF
 REACT_APP_API_BASE=http://127.0.0.1:8000/api
+EOF
+
 ```
 
 Install node modules for frontend:
 
 ```
-cd frontend
 npm install
 ```
 
@@ -48,9 +56,9 @@ docker-compose up --build
 
 This command builds both backend and frontend containers and starts them together.
 
-Backend: http://127.0.0.1:8000
+- Backend: http://127.0.0.1:8000
 
-Frontend: http://localhost:3000
+- Frontend: http://localhost:3000
 
 You can stop the containers anytime with:
 
@@ -58,37 +66,96 @@ You can stop the containers anytime with:
 docker-compose down
 ```
 
-**_ii. Production Mode_**
+> ### **PRODUCTION Development**
 
-For deployment, use your `.env.production` file:
+From the project root (`sql_runner_application`):
+
+```
+#---- Create backend .env.production
+cd backend && cat > .env.production <<EOF
+DATABASE_URL=sql_runner.db
+FLASK_ENV=production
+PORT=8000
+EOF
+
+#---- Create frontend .env.production
+cd ../frontend &&
+touch .env.production &&
+echo "REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api" > .env.production
+```
+
+Install node modules for frontend:
+
+```
+npm install
+```
+
+Start docker, for deployment, use your `.env.production` file:
 
 ```
 docker-compose --env-file .env.production up --build
 ```
 
-Your `.env.production` should include the production API endpoint:
-
-```
-REACT_APP_API_BASE=https://sql-runner-application.onrender.com/api
-```
-
 ## 🧩 2. Manual Setup (Without Docker)
 
-### i. Backend Setup (Flask + SQLite)
+Open your terminal and navigate to the project root:
+
+**⚠️ Note:** Users
+Ensure that Python 3.x is installed and added to your PATH. You can verify this by running: `python --version`, `python3 --version`, `py --version`
+If you don’t have Python installed, download it from [python.org/downloads](https://www.python.org/downloads/) now.
+
+Install dependencies (frontend):
 
 ```bash
-cd ./sql_runner_application/backend
-python -m venv .venv              # create hidden virtual environment
-source .venv/bin/activate         # on Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
+npm install
+cd frontend && npm install && cd ../backend
 ```
 
-The backend runs at:
+You can create virtual environment **(optional)**
 
-`http://127.0.0.1:8000  OR  http://127.0.0.1:5000`
+```bash
+python -m venv .venv              # create hidden virtual environment
+source .venv/bin/activate         # on Windows: .venv\Scripts\activate
+```
 
-You should see:
+Install dependencies **(backend)**
+
+```bash
+pip install -r requirements.txt && cd ..
+```
+
+Create a .env file for API communication **(frontend & backend)**:
+
+```
+#---- Create backend .env
+cd backend && cat > .env <<EOF
+DATABASE_URL=sql_runner.db
+FLASK_ENV=production
+PORT=8000
+EOF
+
+#---- Create frontend .env
+cd ../frontend && cat > .env <<EOF
+REACT_APP_API_BASE=http://127.0.0.1:8000/api
+EOF
+cd ..
+
+```
+
+Run both servers together:
+
+```bash
+npm run dev
+```
+
+Once started:
+
+- Frontend → http://localhost:3000
+
+- Backend API → http://127.0.0.1:8000
+  (or 5000 depending on setup)
+
+✅ Both servers are running, your application is ready to serve.
 
 On Browser: `{ "message": "SQL Runner API is running!" }`
 
@@ -107,36 +174,7 @@ You should see `{ "message": "SQL Runner API is running!" }`
 
 ✅ Your backend is working correctly!
 
-### ii. Frontend Setup (React)
-
-Open a new terminal:
-
-```
-cd ./sql_runner_application/frontend
-```
-
-Create a .env file for API communication:
-
-```
-touch .env
-```
-
-Paste this line inside .env:
-
-```
-REACT_APP_API_BASE=http://127.0.0.1:8000/api
-```
-
-If your backend runs on a different port (e.g., 5000), replace 8000 accordingly.
-
-Then install and run the app:
-
-```
-npm install
-npm start
-```
-
-Your frontend will be available at 👉 `http://localhost:3000`
+---
 
 ### Test Locally
 
@@ -156,9 +194,14 @@ SELECT * FROM table_name LIMIT 5;
 
 ### ☁️ Deployment
 
-- Backend: Render
+1. Production Deployment
+   Backend **_(Render)_**
 
-- Frontend: Vercel
+- Deployed at → https://sql-runner-application.onrender.com
+
+2. Frontend **_(Vercel)_**
+
+- Deployed at → https://sql-runner-application.vercel.app
 
 For production .env:
 
