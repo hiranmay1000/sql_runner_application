@@ -3,6 +3,8 @@
 A full-stack web app that lets users execute SQL queries directly from a browser.  
 Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 
+App is live on: https://sqlrunneronline.vercel.app/
+
 ---
 
 ## 🚀 Features
