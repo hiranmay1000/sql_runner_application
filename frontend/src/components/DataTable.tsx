@@ -11,7 +11,7 @@ import {
 import { ExecuteResponse } from "./types/componentTypes";
 
 function DataTable(props: ExecuteResponse) {
-  const { columns, types, rows } = props;
+  const { columns = [], types = [], rows = [] } = props || {};
 
   return (
     <TableContainer component={Paper} sx={{ mb: 3, maxHeight: 400 }}>
@@ -23,8 +23,8 @@ function DataTable(props: ExecuteResponse) {
                 key={idx}
                 sx={{ backgroundColor: "#eee", fontWeight: "bold" }}
               >
-                {col}{" "}
-                {types && types[idx] && (
+                {col}
+                {types?.[idx] && (
                   <small style={{ color: "gray", fontWeight: "normal" }}>
                     [{types[idx]}]
                   </small>
@@ -34,7 +34,7 @@ function DataTable(props: ExecuteResponse) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.length > 0 ? (
+          {rows?.length > 0 ? (
             rows.map((row: any, i: number) => (
               <TableRow key={i}>
                 {row.map((val: string | number | null, j: number) => (
@@ -45,7 +45,7 @@ function DataTable(props: ExecuteResponse) {
           ) : (
             <TableRow>
               <TableCell
-                colSpan={columns.length}
+                colSpan={columns?.length || 1}
                 align="center"
                 sx={{ color: "gray", fontStyle: "italic" }}
               >
