@@ -99,8 +99,6 @@ function Result(props: ResultsPropsType) {
     }
   }, [isLargeScreen, tabValue, setTabValue]);
 
-  console.log("available table", availableTables);
-
   return (
     <Box mt={4} sx={{ minHeight: "300px" }}>
       {/* Tabs Header */}
@@ -223,7 +221,7 @@ function Result(props: ResultsPropsType) {
       {/* Available Tables Tab */}
       {tabValue === 2 && (
         <Box>
-          {loading ? (
+          {loading || !availableTables ? (
             <Stack direction={"row"}>
               <CircularProgress size={24} />
               <Typography sx={{ ml: 2 }}>Loading...</Typography>

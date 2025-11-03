@@ -1,0 +1,11 @@
+{
+  "name": "sql_runner_application_root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd backend && source .venv/bin/activate && python app/app.py\" \"cd frontend && npm start\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}

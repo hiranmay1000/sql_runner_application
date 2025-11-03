@@ -1,16 +1,30 @@
-# Node.js
-frontend/node_modules/
-frontend/build/
-frontend/.env
+# 🧩 Node / React frontend
+node_modules/
+build/
+.pnp/
+.pnp.js
 
-# Python
-backend/**pycache**/
-backend/_.pyc
-backend/.venv/
-backend/env/
-_.sqlite3
+# 🐍 Python backend
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# *.db. <- I will uncomment it when multi-user features will be integrated
+instance/
+.venv/
+venv/
+env/
+*.sqlite3
 
-# General
-.DS_Store
+# ⚙️ Environment files
 .env
-.env.production
+.env.*
+
+# ⚡ Tools & Platforms
+.vercel/
+.vscode/
+.idea/
+*.swp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
