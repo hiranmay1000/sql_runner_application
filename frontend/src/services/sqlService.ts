@@ -2,7 +2,7 @@ import {
   ExecuteResponse,
   TableInfo,
   TablesResponse,
-} from "../components/types/componentTypes";
+} from "../components/componentTypes";
 import { API_BASE } from "../config/config";
 import axios from "axios";
 

@@ -14,11 +14,14 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import type { QueryResult, ResultsPropsType } from "./types/componentTypes";
 import { useSnackbar } from "../context/SnackbarProvider";
 import { fetchTableInfoAPI, fetchTablesAPI } from "../services/sqlService";
-import QueryList from "./QueryList";
-import DataTable from "./DataTable";
+import DataTable from "../components/DataTable";
+import QueryList from "../components/QueryList";
+import type {
+  QueryResult,
+  ResultsPropsType,
+} from "../components/componentTypes";
 
 function Result(props: ResultsPropsType) {
   const {

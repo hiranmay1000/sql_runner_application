@@ -1,22 +1,19 @@
 import { Box, Divider, Typography } from "@mui/material";
-import type { RecentQueriesPropsType } from "./types/componentTypes";
-import QueryList from "./QueryList";
+import type { RecentQueriesPropsType } from "../components/componentTypes";
+import QueryList from "../components/QueryList";
 
 function RecentQueries(props: RecentQueriesPropsType) {
   const { recentQueries } = props;
 
   return (
     <Box
-      width="320px"
       bgcolor="#f3f3f3"
       p={2}
       overflow="auto"
       sx={{
-        position: "fixed",
-        right: 0,
-        top: 0,
-        bottom: 0,
-        height: "calc(100vh - 100px)",
+        position: "relative",
+        width: "320px",
+        height: "calc(100vh - 180px)",
         border: "1px solid #ddd",
         zIndex: 1200,
         m: 3,

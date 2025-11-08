@@ -7,12 +7,12 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
-import { TableInfo, type SidebarPropsType } from "./types/componentTypes";
 import { useEffect, useState } from "react";
 import { fetchTableInfoAPI } from "../services/sqlService";
+import type { SidebarPropsType, TableInfo } from "../components/componentTypes";
 
 function Sidebar(props: SidebarPropsType) {
-  const { tables, setSelectedTable, setTabValue } = props;
+  const { tables, setSelectedTable, setTabValue, sidebarOpen } = props;
   const [tableInfos, setTableInfos] = useState<Record<string, TableInfo>>({});
 
   // render sidebar table attributes
@@ -33,12 +33,26 @@ function Sidebar(props: SidebarPropsType) {
   }, [tables]);
 
   return (
-    <Box width="300px" bgcolor="#f3f3f3" p={2} overflow="auto">
+    <Box
+      sx={{
+        width: sidebarOpen ? 320 : 0,
+        transition:
+          "width 0.4s ease-in-out, margin 0.3s ease-in-out, padding 0.3s ease-in-out, opacity 0.2s ease-in-out",
+        opacity: sidebarOpen ? 1 : 0,
+        overflowX: "hidden",
+        bgcolor: "#f3f3f3",
+        m: sidebarOpen ? 3 : 0,
+        p: sidebarOpen ? 2 : 0,
+        mt: 3,
+        pt: 2,
+        borderRadius: 3,
+        border: "1px solid #ddd",
+      }}
+    >
       <Typography variant="h6" fontWeight={"bold"} gutterBottom>
         Tables
       </Typography>
       <Divider sx={{ mb: 2 }} />
-
       <List>
         {tables
           .slice()

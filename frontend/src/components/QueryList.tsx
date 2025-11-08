@@ -1,5 +1,5 @@
 import { List, ListItem, Tooltip } from "@mui/material";
-import { RecentQueriesPropsType } from "./types/componentTypes";
+import { RecentQueriesPropsType } from "./componentTypes";
 import { useState } from "react";
 
 function QueryList(props: RecentQueriesPropsType) {
