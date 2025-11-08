@@ -8,7 +8,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { ExecuteResponse } from "./types/componentTypes";
+import { ExecuteResponse } from "./componentTypes";
 
 function DataTable(props: ExecuteResponse) {
   const { columns = [], types = [], rows = [] } = props || {};

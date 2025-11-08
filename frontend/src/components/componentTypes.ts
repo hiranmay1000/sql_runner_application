@@ -30,6 +30,7 @@ export interface SidebarPropsType {
   selectedTable: TableInfo | null;
   setSelectedTable: (table: TableInfo | null) => void;
   setTabValue: (tab: number) => void;
+  sidebarOpen: boolean;
 }
 
 export interface ResultsPropsType {
