@@ -1,21 +1,39 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { userLoginAPI } from "../services/sqlAuth";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/slice/userAuth.slice";
+import { AppDispatch } from "../redux/store";
+import { useSnackbar } from "../context/SnackbarProvider";
+import { CloseOutlined } from "@mui/icons-material";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const showMessage = useSnackbar().showMessage;
 
   const handleLogin = async () => {
-    try {
-      const response = await userLoginAPI(email, password);
+    const action = await dispatch(loginUser({ email, password }));
 
-      console.log("response", response);
-    } catch (error) {
-      console.error(error);
+    if (loginUser.fulfilled.match(action)) {
+      navigate("/");
+      localStorage.setItem("token", action.payload.token);
+      showMessage(action.payload.message, "success");
+    } else if (loginUser.rejected.match(action)) {
+      showMessage(
+        (action.payload as { error?: string })?.error || "Login failed",
+        "error"
+      );
     }
   };
 
@@ -39,8 +57,20 @@ export default function Login() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          position: "relative",
         }}
       >
+        <IconButton
+          onClick={() => navigate("/")}
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+          }}
+        >
+          <CloseOutlined />
+        </IconButton>
+
         <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: "#333" }}>
           Login to SQL Runner
         </Typography>

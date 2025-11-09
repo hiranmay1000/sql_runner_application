@@ -1,21 +1,55 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { userRegisterAPI } from "../services/sqlAuth";
 import { useState } from "react";
+import { CloseOutlined } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { signupUser } from "../redux/slice/userAuth.slice";
+import { useSnackbar } from "../context/SnackbarProvider";
+import { AppDispatch } from "../redux/store";
 
 export default function Signup() {
-  const navigate = useNavigate();
-  const [fullname, setFullname] = useState<string>("");
+  const [firstname, setFistname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { showMessage } = useSnackbar();
 
   const handleRegister = async () => {
-    try {
-      const response = await userRegisterAPI(fullname, email, password);
+    if (!firstname || !email || !password || !confirmPassword) {
+      showMessage("All fields are required", "error");
+      return;
+    }
 
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+    const action = await dispatch(
+      signupUser({ firstname, lastname, email, password })
+    );
+
+    if (signupUser.fulfilled.match(action)) {
+      const { token } = action.payload;
+
+      if (token) localStorage.setItem("token", token);
+
+      showMessage("User registered successfully!", "success");
+      navigate("/");
+      return;
+    }
+
+    if (signupUser.rejected.match(action)) {
+      const errorMsg =
+        (action.payload as { error: string })?.error ||
+        "Registration failed. Try again.";
+      showMessage(errorMsg, "error");
     }
   };
 
@@ -39,18 +73,37 @@ export default function Signup() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          position: "relative",
         }}
       >
+        <IconButton
+          onClick={() => navigate("/")}
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+          }}
+        >
+          <CloseOutlined />
+        </IconButton>
         <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: "#333" }}>
           Create Your Account
         </Typography>
 
         <TextField
-          label="Full Name"
+          label="Firstname"
           fullWidth
           variant="outlined"
           sx={{ mb: 2 }}
-          onChange={(e) => setFullname(e.target.value)}
+          onChange={(e) => setFistname(e.target.value)}
+        />
+
+        <TextField
+          label="Lastname"
+          fullWidth
+          variant="outlined"
+          sx={{ mb: 2 }}
+          onChange={(e) => setLastname(e.target.value)}
         />
 
         <TextField
@@ -77,6 +130,7 @@ export default function Signup() {
           fullWidth
           variant="outlined"
           sx={{ mb: 3 }}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         <Button
