@@ -2,6 +2,7 @@ import sqlite3
 import os
 from dotenv import load_dotenv
 from collections import OrderedDict
+from flask import jsonify
 
 load_dotenv()
 
@@ -27,7 +28,6 @@ def execute_query(query):
             columns = [desc[0] for desc in cursor.description]
             rows = cursor.fetchall()
             results = [list(row) for row in rows]
-            print(columns)
             return {"columns": columns, "rows": results}
         else:
             return {"message": "Query executed successfully."}

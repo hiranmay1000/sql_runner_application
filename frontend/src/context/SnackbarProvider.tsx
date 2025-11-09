@@ -1,14 +1,20 @@
-// src/context/SnackbarProvider.tsx
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Snackbar } from "@mui/material";
+import { Snackbar, Alert, Slide, SlideProps } from "@mui/material";
 
 interface SnackbarContextType {
-  showMessage: (message: string) => void;
+  showMessage: (
+    message: string,
+    severity?: "success" | "error" | "info" | "warning"
+  ) => void;
 }
 
 const SnackbarContext = createContext<SnackbarContextType | undefined>(
   undefined
 );
+
+function SlideTransition(props: SlideProps) {
+  return <Slide {...props} direction="up" />;
+}
 
 export const useSnackbar = (): SnackbarContextType => {
   const context = useContext(SnackbarContext);
@@ -21,9 +27,16 @@ export const useSnackbar = (): SnackbarContextType => {
 export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<
+    "success" | "error" | "info" | "warning"
+  >("info");
 
-  const showMessage = (msg: string) => {
+  const showMessage = (
+    msg: string,
+    sev: "success" | "error" | "info" | "warning" = "info"
+  ) => {
     setMessage(msg);
+    setSeverity(sev);
     setOpen(true);
   };
 
@@ -32,13 +45,23 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
   return (
     <SnackbarContext.Provider value={{ showMessage }}>
       {children}
+
       <Snackbar
         open={open}
-        autoHideDuration={1500}
         onClose={handleClose}
-        message={message}
+        autoHideDuration={3000}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
+        slots={{ transition: SlideTransition }}
+      >
+        <Alert
+          severity={severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          onClose={handleClose}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </SnackbarContext.Provider>
   );
 };
