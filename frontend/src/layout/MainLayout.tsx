@@ -4,10 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import { Cancel, CheckCircle } from "@mui/icons-material";
 import type { ExecuteResponse, TableInfo } from "../components/componentTypes";
 import { useSnackbar } from "../context/SnackbarProvider";
-import { getStoredQueries, saveQuery } from "../utils/recentQueries";
 import { fetchTablesAPI, runQueryAPI } from "../services/sqlService";
 import RecentQueries from "./RecentQueries";
 import Sidebar from "./Sidebar";
+import { useDispatch } from "react-redux";
+import { setQueries } from "../redux/slice/query.slice";
 
 export default function MainLayout(props: { sidebarOpen: boolean }) {
   const [tables, setTables] = useState<string[]>([]);
@@ -15,11 +16,11 @@ export default function MainLayout(props: { sidebarOpen: boolean }) {
   const [results, setResults] = useState<ExecuteResponse | null>(null);
   const [error, setError] = useState<string>("");
   const [tabValue, setTabValue] = useState<number>(0);
-  const [recentQueries, setRecentQueries] = useState<string[]>([]);
   const [query, setQuery] = useState<string>("");
   const [querySuccessfulIcon, setQuerySuccessfulIcon] = useState<number>(0);
 
   const { sidebarOpen } = props;
+  const dispatch = useDispatch();
   const { showMessage } = useSnackbar();
 
   const fetchTables = useCallback(async () => {
@@ -45,10 +46,6 @@ export default function MainLayout(props: { sidebarOpen: boolean }) {
     handleQuerySuccessfulIcon();
   }, [querySuccessfulIcon]);
 
-  useEffect(() => {
-    setRecentQueries(getStoredQueries());
-  }, []);
-
   const handleRunQuery = async () => {
     setError("");
     setSelectedTable(null);
@@ -61,14 +58,12 @@ export default function MainLayout(props: { sidebarOpen: boolean }) {
       setTabValue(1);
       setQuerySuccessfulIcon(1);
 
-      // update sidebar
       const qry_head = query.trim().split(" ")[0].toLowerCase();
       if (qry_head === "create" || qry_head === "drop") {
         fetchTables();
       }
 
-      // store recently used queries
-      setRecentQueries(saveQuery(query));
+      dispatch(setQueries(query));
     } catch (err: any) {
       const backendError = err.response?.data?.error;
       const errorMsg = backendError || err.message || "Error executing query";
@@ -80,12 +75,6 @@ export default function MainLayout(props: { sidebarOpen: boolean }) {
       setTabValue(0);
     }
   };
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setHideSidebar(sidebarOpen);
-  //   }, 1000);
-  // }, [sidebarOpen]);
 
   return (
     <Box display="flex" height="calc(100vh - 80px)">
@@ -153,13 +142,12 @@ export default function MainLayout(props: { sidebarOpen: boolean }) {
               selectedTable={selectedTable}
               tabValue={tabValue}
               setTabValue={setTabValue}
-              recentQueries={recentQueries}
             />
           </Box>
         </Stack>
       </Box>
       {/* ----------Recent Query Searches---------- */}
-      <RecentQueries recentQueries={recentQueries} />
+      <RecentQueries />
     </Box>
   );
 }

@@ -52,11 +52,12 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
         autoHideDuration={3000}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         slots={{ transition: SlideTransition }}
+        sx={{ zIndex: 5000 }}
       >
         <Alert
           severity={severity}
           variant="filled"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", boxShadow: 7 }}
           onClose={handleClose}
         >
           {message}

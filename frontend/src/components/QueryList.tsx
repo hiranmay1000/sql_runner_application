@@ -1,11 +1,14 @@
 import { List, ListItem, Tooltip } from "@mui/material";
-import { RecentQueriesPropsType } from "./componentTypes";
 import { useState } from "react";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
 
-function QueryList(props: RecentQueriesPropsType) {
-  const { recentQueries } = props;
-
+function QueryList() {
   const [copyText, setCopyText] = useState<string>("Copy");
+
+  const recentQueries = useSelector(
+    (state: RootState) => state.query.recentQueries
+  );
 
   const handleCopy = async (query: string) => {
     try {

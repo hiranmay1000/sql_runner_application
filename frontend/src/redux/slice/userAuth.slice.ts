@@ -70,6 +70,22 @@ const userAuthSlice = createSlice({
         state.loading = false;
         state.error =
           (action.payload as { error?: string })?.error || "Login failed";
+      })
+
+      .addCase(signupUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as { error?: string })?.error ||
+          "Unable to create user";
       });
   },
 });

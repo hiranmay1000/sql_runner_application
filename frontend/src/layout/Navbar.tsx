@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,7 +8,6 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import type { NavbarPorpsType } from "./types";
 import { APP_DETAILS } from "../config/constant";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import {
@@ -22,11 +21,15 @@ import {
 } from "@mui/material";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 import { logout } from "../redux/slice/userAuth.slice";
+import Login from "../pages/Login";
+import Signup from "../pages/Signup";
 
 export default function Navbar(props: NavbarPorpsType) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [showLoginModal, setShowLoginModal] = React.useState<boolean>(false);
+  const [showSignupModal, setShowSignupModal] = React.useState<boolean>(false);
+
   const { setSidebarOpen } = props;
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
@@ -41,7 +44,6 @@ export default function Navbar(props: NavbarPorpsType) {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
     handleClose();
   };
 
@@ -144,8 +146,9 @@ export default function Navbar(props: NavbarPorpsType) {
                 justifyContent={"center"}
                 alignItems={"center"}
                 sx={{
-                  backgroundColor: "#04446aff",
+                  backgroundColor: "#13557bff",
                   borderRadius: 2,
+                  boxShadow: 3,
                   "&:hover": {
                     backgroundColor: "#0d4e74ff",
                     cursor: "pointer",
@@ -155,7 +158,7 @@ export default function Navbar(props: NavbarPorpsType) {
                 <MenuItem onClick={handleClick}>
                   <Avatar sx={{ width: 24, height: 24 }} />
                   <Typography fontWeight={"bold"} ml={1}>
-                    {user.firstname + user.lastname || "User"}
+                    {user.firstname + " " + user.lastname || "User"}
                   </Typography>
                 </MenuItem>
               </Stack>
@@ -169,13 +172,27 @@ export default function Navbar(props: NavbarPorpsType) {
                 py: 1.2,
                 borderRadius: 2,
               }}
-              onClick={() => navigate("/login")}
+              onClick={() => setShowLoginModal(true)}
             >
               Login
             </Button>
           )}
         </Toolbar>
       </AppBar>
+      {showLoginModal && (
+        <Login
+          onClose={() => setShowLoginModal(false)}
+          setShowSignupModal={setShowSignupModal}
+          setShowLoginModal={setShowLoginModal}
+        />
+      )}
+      {showSignupModal && (
+        <Signup
+          onClose={() => setShowSignupModal(false)}
+          setShowSignupModal={setShowSignupModal}
+          setShowLoginModal={setShowLoginModal}
+        />
+      )}
     </Box>
   );
 }
