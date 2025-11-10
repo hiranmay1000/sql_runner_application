@@ -10,29 +10,32 @@ from database import execute_query, get_table_names, get_table_info
 load_dotenv()
 flask_env = os.environ.get("FLASK_ENV", "production")
 debug_mode = False
-frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+allowed_url_cors = [
+    "https://sqlrunneronline.vercel.app",
+    "http://localhost:3000"
+]
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": allowed_url_cors}}, supports_credentials=True)
 # CORS(app)
 
 @app.route('/api/register', methods=['POST'])
 def user_register():
-    data = request.get_json()
-    return processSignup(data)
+    body = request.get_json()
+    return processSignup(body)
 
 
 @app.route("/api/login", methods=['POST'])
 def user_login():
-    data = request.get_json()
-    return processLogin(data)
+    body = request.get_json()
+    return processLogin(body)
 
 
 @app.route("/api/run-query", methods=["POST"])
 def run_query():
-    data = request.get_json()
-    query = data.get("query")
+    body = request.get_json()
+    query = body.get("query")
     if not query:
         return jsonify({"error": "No query provided"}), 400
 

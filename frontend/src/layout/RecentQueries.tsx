@@ -1,10 +1,7 @@
 import { Box, Divider, Typography } from "@mui/material";
-import type { RecentQueriesPropsType } from "../components/componentTypes";
 import QueryList from "../components/QueryList";
 
-function RecentQueries(props: RecentQueriesPropsType) {
-  const { recentQueries } = props;
-
+function RecentQueries() {
   return (
     <Box
       bgcolor="#f3f3f3"
@@ -31,7 +28,7 @@ function RecentQueries(props: RecentQueriesPropsType) {
       <Typography fontWeight="bold">Recent Queries</Typography>
       <Divider sx={{ mb: 2 }} />
       <Box>
-        <QueryList recentQueries={recentQueries} />
+        <QueryList />
       </Box>
     </Box>
   );

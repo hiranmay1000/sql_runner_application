@@ -6,22 +6,27 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 import { CloseOutlined } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { signupUser } from "../redux/slice/userAuth.slice";
 import { useSnackbar } from "../context/SnackbarProvider";
 import { AppDispatch } from "../redux/store";
 
-export default function Signup() {
+interface SignupPropsType {
+  onClose: () => void;
+  setShowLoginModal: (modal: boolean) => void;
+  setShowSignupModal: (modal: boolean) => void;
+}
+
+export default function Signup(props: SignupPropsType) {
   const [firstname, setFistname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const navigate = useNavigate();
+  const { onClose, setShowLoginModal, setShowSignupModal } = props;
   const dispatch = useDispatch<AppDispatch>();
   const { showMessage } = useSnackbar();
 
@@ -36,12 +41,8 @@ export default function Signup() {
     );
 
     if (signupUser.fulfilled.match(action)) {
-      const { token } = action.payload;
-
-      if (token) localStorage.setItem("token", token);
-
-      showMessage("User registered successfully!", "success");
-      navigate("/");
+      localStorage.setItem("token", action.payload.token);
+      showMessage(action.payload.message, "success");
       return;
     }
 
@@ -53,17 +54,37 @@ export default function Signup() {
     }
   };
 
+  React.useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleEsc);
+
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
   return (
     <Box
+      onClick={onClose}
       sx={{
-        minHeight: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0,0,0,0.4)",
+        backdropFilter: "blur(4px)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        bgcolor: "#f5f6fa",
+        zIndex: 2000,
       }}
     >
       <Paper
+        onClick={(e) => e.stopPropagation()}
         elevation={3}
         sx={{
           width: "90%",
@@ -77,7 +98,7 @@ export default function Signup() {
         }}
       >
         <IconButton
-          onClick={() => navigate("/")}
+          onClick={onClose}
           sx={{
             position: "absolute",
             top: 8,
@@ -155,7 +176,10 @@ export default function Signup() {
           <Box
             component="span"
             sx={{ color: "#0067a3b0", cursor: "pointer", fontWeight: 500 }}
-            onClick={() => navigate("/login")}
+            onClick={() => {
+              setShowSignupModal(false);
+              setShowLoginModal(true);
+            }}
           >
             Log in
           </Box>

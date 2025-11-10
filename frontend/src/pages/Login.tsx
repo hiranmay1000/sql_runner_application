@@ -6,19 +6,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../redux/slice/userAuth.slice";
 import { AppDispatch } from "../redux/store";
 import { useSnackbar } from "../context/SnackbarProvider";
 import { CloseOutlined } from "@mui/icons-material";
 
-export default function Login() {
+interface LoginPropsType {
+  onClose: () => void;
+  setShowSignupModal: (modal: boolean) => void;
+  setShowLoginModal: (modal: boolean) => void;
+}
+
+export default function Login(props: LoginPropsType) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const navigate = useNavigate();
+  const { onClose, setShowSignupModal, setShowLoginModal } = props;
   const dispatch = useDispatch<AppDispatch>();
   const showMessage = useSnackbar().showMessage;
 
@@ -26,7 +31,6 @@ export default function Login() {
     const action = await dispatch(loginUser({ email, password }));
 
     if (loginUser.fulfilled.match(action)) {
-      navigate("/");
       localStorage.setItem("token", action.payload.token);
       showMessage(action.payload.message, "success");
     } else if (loginUser.rejected.match(action)) {
@@ -37,22 +41,43 @@ export default function Login() {
     }
   };
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleEsc);
+
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
   return (
     <Box
+      onClick={onClose}
       sx={{
-        minHeight: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0,0,0,0.4)",
+        backdropFilter: "blur(4px)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        bgcolor: "#f5f6fa",
+        zIndex: 2000,
       }}
     >
       <Paper
+        onClick={(e) => e.stopPropagation()}
         elevation={3}
         sx={{
           width: "90%",
           maxWidth: 400,
           p: 4,
+          m: 3,
           borderRadius: 3,
           display: "flex",
           flexDirection: "column",
@@ -61,7 +86,7 @@ export default function Login() {
         }}
       >
         <IconButton
-          onClick={() => navigate("/")}
+          onClick={onClose}
           sx={{
             position: "absolute",
             top: 8,
@@ -115,7 +140,10 @@ export default function Login() {
           <Box
             component="span"
             sx={{ color: "#0067a3b0", cursor: "pointer", fontWeight: 500 }}
-            onClick={() => navigate("/signup")}
+            onClick={() => {
+              setShowLoginModal(false);
+              setShowSignupModal(true);
+            }}
           >
             Sign up
           </Box>

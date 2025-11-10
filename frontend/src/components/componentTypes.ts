@@ -39,11 +39,6 @@ export interface ResultsPropsType {
   selectedTable: TableInfo | null;
   tabValue: number;
   setTabValue: (tab: number) => void;
-  recentQueries: string[];
-}
-
-export interface RecentQueriesPropsType {
-  recentQueries: string[];
 }
 
 export interface DataTablePropsType {

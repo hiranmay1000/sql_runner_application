@@ -24,14 +24,7 @@ import type {
 } from "../components/componentTypes";
 
 function Result(props: ResultsPropsType) {
-  const {
-    results,
-    error,
-    selectedTable,
-    tabValue,
-    setTabValue,
-    recentQueries,
-  } = props;
+  const { results, error, selectedTable, tabValue, setTabValue } = props;
   const [tables, setTables] = useState<string[]>();
   const [availableTables, setAvailableTables] = useState<QueryResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -250,7 +243,7 @@ function Result(props: ResultsPropsType) {
         </Box>
       )}
 
-      {tabValue === 3 && <QueryList recentQueries={recentQueries} />}
+      {tabValue === 3 && <QueryList />}
     </Box>
   );
 }
