@@ -5,7 +5,6 @@ import {
   ListItem,
   ListItemText,
   Typography,
-  Paper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { fetchTableInfoAPI } from "../services/sqlService";
