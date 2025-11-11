@@ -23,6 +23,7 @@ import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 import { logout } from "../redux/slice/userAuth.slice";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import { useSnackbar } from "../context/SnackbarProvider";
 
 export default function Navbar(props: NavbarPorpsType) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -33,6 +34,7 @@ export default function Navbar(props: NavbarPorpsType) {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const showMessage = useSnackbar().showMessage;
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -44,18 +46,22 @@ export default function Navbar(props: NavbarPorpsType) {
 
   const handleLogout = () => {
     dispatch(logout());
+    showMessage("Logged out successfully");
     handleClose();
   };
 
   useEffect(() => {
-    console.log("user", user);
+    if (user) {
+      setShowLoginModal(false);
+      setShowSignupModal(false);
+    }
   }, [user]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
-        sx={{ backgroundColor: "#0067a3ca", backdropFilter: "blur(5px)" }}
+        sx={{ backgroundColor: "#122c40ff", backdropFilter: "blur(5px)" }}
       >
         <Toolbar>
           <IconButton

@@ -8,7 +8,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { ExecuteResponse } from "./componentTypes";
+import { ExecuteResponse } from "./component.ypes";
 
 function DataTable(props: ExecuteResponse) {
   const { columns = [], types = [], rows = [] } = props || {};
@@ -47,7 +47,11 @@ function DataTable(props: ExecuteResponse) {
               <TableCell
                 colSpan={columns?.length || 1}
                 align="center"
-                sx={{ color: "gray", fontStyle: "italic" }}
+                sx={{
+                  bgcolor: "lightyellow",
+                  color: "gray",
+                  fontStyle: "italic",
+                }}
               >
                 This table is empty
               </TableCell>

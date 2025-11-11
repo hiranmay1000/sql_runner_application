@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { fetchTableInfoAPI } from "../services/sqlService";
-import type { SidebarPropsType, TableInfo } from "../components/componentTypes";
+import type { SidebarPropsType, TableInfo } from "../components/component.ypes";
 
 function Sidebar(props: SidebarPropsType) {
   const { tables, setSelectedTable, setTabValue, sidebarOpen } = props;
@@ -59,37 +59,36 @@ function Sidebar(props: SidebarPropsType) {
           .reverse()
           .map((table) => {
             const tableInfo = tableInfos[table];
+            const name = table;
             return (
               <Box
+                onClick={() => {
+                  setSelectedTable({ ...tableInfo, name });
+                  setTabValue(1);
+                }}
                 key={table}
                 mb={2}
                 sx={{
-                  border: "1px solid #828282ff",
-                  backgroundColor: "#f1f1f1ff",
-                  borderRadius: 1,
-                  pb: 1,
+                  bgcolor: "#fff",
+                  borderRadius: 2,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  fontFamily: "monospace",
+                  fontSize: "0.9rem",
+                  p: 2,
+                  cursor: "pointer",
+                  transition: "all 0.1s ease-in-out",
+                  "&:hover": {
+                    bgcolor: "#e8f0fe",
+                    transform: "scale(1.01)",
+                  },
                 }}
               >
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 1,
-                    bgcolor: "#fafafa",
-                    cursor: "pointer",
-                    "&:hover": { backgroundColor: "#ddd" },
-                  }}
-                  onClick={() => {
-                    setSelectedTable(tableInfo);
-                    setTabValue(1);
-                  }}
-                >
-                  <Typography variant="subtitle1" fontWeight={600}>
-                    {table}
-                  </Typography>
-                </Paper>
+                <Typography variant="subtitle1" fontWeight={600}>
+                  {table}
+                </Typography>
 
                 {tableInfo && (
-                  <List disablePadding sx={{ pl: 2 }}>
+                  <List disablePadding>
                     {tableInfo.columns.map((col, idx) => (
                       <ListItem key={col} sx={{ py: 0 }}>
                         <ListItemText
