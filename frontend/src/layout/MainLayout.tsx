@@ -2,7 +2,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import Result from "./Result";
 import { useCallback, useEffect, useState } from "react";
 import { Cancel, CheckCircle } from "@mui/icons-material";
-import type { ExecuteResponse, TableInfo } from "../components/componentTypes";
+import type { ExecuteResponse, TableInfo } from "../components/component.ypes";
 import { useSnackbar } from "../context/SnackbarProvider";
 import { fetchTablesAPI, runQueryAPI } from "../services/sqlService";
 import RecentQueries from "./RecentQueries";

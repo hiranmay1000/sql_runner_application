@@ -21,7 +21,7 @@ import QueryList from "../components/QueryList";
 import type {
   QueryResult,
   ResultsPropsType,
-} from "../components/componentTypes";
+} from "../components/component.ypes";
 
 function Result(props: ResultsPropsType) {
   const { results, error, selectedTable, tabValue, setTabValue } = props;
@@ -72,8 +72,8 @@ function Result(props: ResultsPropsType) {
             tables.map(async (table) => {
               const response = await fetchTableInfoAPI(table);
               return {
-                name: table,
                 ...response.data,
+                name: table,
               };
             })
           );
@@ -96,7 +96,12 @@ function Result(props: ResultsPropsType) {
   }, [isLargeScreen, tabValue, setTabValue]);
 
   return (
-    <Box mt={4} sx={{ minHeight: "300px" }}>
+    <Box
+      mt={4}
+      sx={{
+        minHeight: "300px",
+      }}
+    >
       {/* Tabs Header */}
       <Tabs
         value={tabValue}
@@ -123,7 +128,6 @@ function Result(props: ResultsPropsType) {
         />
         <Tab label="Preview (Table)" />
         <Tab label="Available Tables" />
-        {/* Hide this tab when screen size is greater than 1200px in width */}
         {!isLargeScreen && <Tab label="Recent Queries" />}
       </Tabs>
 
@@ -203,8 +207,21 @@ function Result(props: ResultsPropsType) {
           {selectedTable && (
             <>
               <Typography variant="h6" gutterBottom>
-                Table Preview:
+                Table Preview:{" "}
+                <Box
+                  component="span"
+                  sx={{
+                    backgroundColor: "#eee",
+                    px: 1,
+                    py: 0.3,
+                    borderRadius: 1,
+                    fontWeight: 500,
+                  }}
+                >
+                  {selectedTable.name}
+                </Box>
               </Typography>
+
               <DataTable
                 columns={selectedTable.columns}
                 rows={selectedTable.rows}
@@ -224,16 +241,20 @@ function Result(props: ResultsPropsType) {
             </Stack>
           ) : availableTables.length > 0 ? (
             availableTables.map((table, idx) => (
-              <Box key={idx} sx={{ mb: 4, p: 1 }}>
-                <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-                  {table.name}
-                </Typography>
-                <DataTable
-                  columns={table.columns}
-                  types={table.types}
-                  rows={table.rows}
-                />
-              </Box>
+              <>
+                <Box key={idx} sx={{ mt: 3, p: 1 }}>
+                  <Typography sx={{ fontWeight: "bold", mb: 1 }}>
+                    {idx + 1}
+                    {". "}
+                    {table.name}
+                  </Typography>
+                  <DataTable
+                    columns={table.columns}
+                    types={table.types}
+                    rows={table.rows}
+                  />
+                </Box>
+              </>
             ))
           ) : (
             <Typography fontWeight={"bold"}>
