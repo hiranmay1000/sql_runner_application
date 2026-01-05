@@ -8,7 +8,7 @@ from database import execute_query, get_table_names, get_table_info
 
 
 load_dotenv()
-flask_env = os.environ.get("FLASK_ENV", "production")
+flask_env = os.environ.get("FLASK_ENV", "PROD")
 debug_mode = False
 allowed_url_cors = [
     "https://sqlrunneronline.vercel.app",
@@ -66,8 +66,10 @@ def root():
 
 
 if __name__ == "__main__":
-    if(flask_env == "production"):
+    if(flask_env == "PROD"):
         debug_mode = False
+    else:
+        debug_mode = True
 
     port = int(os.environ.get("PORT", 8000))
 

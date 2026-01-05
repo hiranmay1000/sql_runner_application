@@ -24,11 +24,15 @@ import { logout } from "../redux/slice/userAuth.slice";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import { useSnackbar } from "../context/SnackbarProvider";
+import ForgotPassword from "../pages/ForgotPass";
 
 export default function Navbar(props: NavbarPorpsType) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [email, setEmail] = React.useState<string>("");
   const [showLoginModal, setShowLoginModal] = React.useState<boolean>(false);
   const [showSignupModal, setShowSignupModal] = React.useState<boolean>(false);
+  const [showForgotPassModal, setShowForgotPassModal] =
+    React.useState<boolean>(false);
 
   const { setSidebarOpen } = props;
   const dispatch = useDispatch<AppDispatch>();
@@ -61,11 +65,13 @@ export default function Navbar(props: NavbarPorpsType) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
-        sx={{ backgroundColor: "#122c40ff", backdropFilter: "blur(5px)" }}
+        sx={{
+          backgroundColor: "#122c40ff",
+          backdropFilter: "blur(5px)",
+        }}
       >
         <Toolbar>
           <IconButton
-            size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
@@ -152,12 +158,10 @@ export default function Navbar(props: NavbarPorpsType) {
                 justifyContent={"center"}
                 alignItems={"center"}
                 sx={{
-                  backgroundColor: "#13557bff",
                   borderRadius: 2,
-                  boxShadow: 3,
                   "&:hover": {
-                    backgroundColor: "#0d4e74ff",
                     cursor: "pointer",
+                    textDecoration: "underline",
                   },
                 }}
               >
@@ -175,7 +179,6 @@ export default function Navbar(props: NavbarPorpsType) {
               sx={{
                 bgcolor: "#5bb9f0b0",
                 ":hover": { bgcolor: "#9dd5f3ff" },
-                py: 1.2,
                 borderRadius: 2,
               }}
               onClick={() => setShowLoginModal(true)}
@@ -187,15 +190,28 @@ export default function Navbar(props: NavbarPorpsType) {
       </AppBar>
       {showLoginModal && (
         <Login
+          email={email}
+          setEmail={setEmail}
           onClose={() => setShowLoginModal(false)}
           setShowSignupModal={setShowSignupModal}
           setShowLoginModal={setShowLoginModal}
+          setShowForgotPassModal={setShowForgotPassModal}
         />
       )}
       {showSignupModal && (
         <Signup
+          email={email}
+          setEmail={setEmail}
           onClose={() => setShowSignupModal(false)}
           setShowSignupModal={setShowSignupModal}
+          setShowLoginModal={setShowLoginModal}
+        />
+      )}
+      {showForgotPassModal && (
+        <ForgotPassword
+          email={email}
+          setEmail={setEmail}
+          onClose={() => setShowForgotPassModal(false)}
           setShowLoginModal={setShowLoginModal}
         />
       )}

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Paper,
   TextField,
@@ -14,26 +15,41 @@ import { useSnackbar } from "../context/SnackbarProvider";
 import { CloseOutlined } from "@mui/icons-material";
 
 interface LoginPropsType {
+  email: string;
+  setEmail: (email: string) => void;
   onClose: () => void;
   setShowSignupModal: (modal: boolean) => void;
   setShowLoginModal: (modal: boolean) => void;
+  setShowForgotPassModal: (modal: boolean) => void;
 }
 
 export default function Login(props: LoginPropsType) {
-  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isLoginFailed, setLoginFailed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { onClose, setShowSignupModal, setShowLoginModal } = props;
+  const {
+    email,
+    setEmail,
+    onClose,
+    setShowSignupModal,
+    setShowLoginModal,
+    setShowForgotPassModal,
+  } = props;
   const dispatch = useDispatch<AppDispatch>();
   const showMessage = useSnackbar().showMessage;
 
   const handleLogin = async () => {
+    setLoading(true);
     const action = await dispatch(loginUser({ email, password }));
 
     if (loginUser.fulfilled.match(action)) {
       localStorage.setItem("token", action.payload.token);
       showMessage(action.payload.message, "success");
+      setLoading(false);
     } else if (loginUser.rejected.match(action)) {
+      setLoginFailed(true);
+      setLoading(false);
       showMessage(
         (action.payload as { error?: string })?.error || "Login failed",
         "error"
@@ -106,17 +122,42 @@ export default function Login(props: LoginPropsType) {
           fullWidth
           variant="outlined"
           sx={{ mb: 2 }}
+          required
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          variant="outlined"
-          sx={{ mb: 3 }}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <Box sx={{ width: "100%", mb: 2 }}>
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          {isLoginFailed && (
+            <Typography
+              onClick={() => {
+                setShowForgotPassModal(true);
+                setShowLoginModal(false);
+              }}
+              sx={{
+                mt: 1,
+                ml: 0.2,
+                fontSize: "0.8rem",
+                cursor: "pointer",
+                color: "#0067a3b0",
+                alignSelf: "flex-start",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              Forgot password?
+            </Typography>
+          )}
+        </Box>
 
         <Button
           variant="contained"
@@ -128,8 +169,9 @@ export default function Login(props: LoginPropsType) {
             borderRadius: 2,
           }}
           onClick={handleLogin}
+          disabled={loading}
         >
-          Login
+          {loading ? <CircularProgress size={25} color="inherit" /> : "Login"}
         </Button>
 
         <Typography

@@ -14,6 +14,8 @@ import { useSnackbar } from "../context/SnackbarProvider";
 import { AppDispatch } from "../redux/store";
 
 interface SignupPropsType {
+  email: string;
+  setEmail: (email: string) => void;
   onClose: () => void;
   setShowLoginModal: (modal: boolean) => void;
   setShowSignupModal: (modal: boolean) => void;
@@ -22,11 +24,11 @@ interface SignupPropsType {
 export default function Signup(props: SignupPropsType) {
   const [firstname, setFistname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { onClose, setShowLoginModal, setShowSignupModal } = props;
+  const { email, setEmail, onClose, setShowLoginModal, setShowSignupModal } =
+    props;
   const dispatch = useDispatch<AppDispatch>();
   const { showMessage } = useSnackbar();
 
@@ -130,6 +132,7 @@ export default function Signup(props: SignupPropsType) {
         <TextField
           label="Email"
           type="email"
+          value={email}
           fullWidth
           variant="outlined"
           sx={{ mb: 2 }}

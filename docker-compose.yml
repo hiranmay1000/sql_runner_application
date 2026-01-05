@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      FLASK_ENV: production
+      FLASK_ENV: PROD
       PORT: 8000
       DEBUG: "False"
       DATABASE_URL: app/sql_runner.db
