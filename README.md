@@ -5,6 +5,13 @@ Built with **React (frontend)**, **Flask (backend)**, and **SQLite**.
 
 App is live on: https://sqlrunneronline.vercel.app/
 
+## Video demo
+
+
+https://github.com/user-attachments/assets/cd5747db-6d79-4210-a66e-33f1374d2d7a
+
+
+
 ---
 
 ## 🚀 Features
