@@ -8,8 +8,8 @@ services:
     environment:
       FLASK_ENV: PROD
       PORT: 8000
-      DEBUG: "False"
       DATABASE_URL: app/sql_runner.db
+      MONGO_URI: "mongodb+srv://hiranmay1000:Jupiter%408-3do@appx-cluster.9dfkgfm.mongodb.net/?appName=appx-cluster"
     volumes:
       - ./backend:/app
     command: >

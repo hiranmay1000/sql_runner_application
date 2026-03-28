@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../redux/slice/userAuth.slice";
 import { AppDispatch } from "../redux/store";
-import { useSnackbar } from "../context/SnackbarProvider";
+import { useSnackbar } from "../context/Snackbar/SnackbarProvider";
 import { CloseOutlined } from "@mui/icons-material";
 
 interface LoginPropsType {

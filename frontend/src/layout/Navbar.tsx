@@ -19,11 +19,18 @@ import {
   Stack,
   Tooltip,
 } from "@mui/material";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import {
+  DarkMode,
+  LightMode,
+  Logout,
+  PersonAdd,
+  Settings,
+} from "@mui/icons-material";
 import { logout } from "../redux/slice/userAuth.slice";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
-import { useSnackbar } from "../context/SnackbarProvider";
+import { useSnackbar } from "../context/Snackbar/SnackbarProvider";
+import { setTheme } from "../redux/slice/theme.slice";
 import ForgotPassword from "../pages/ForgotPass";
 
 export default function Navbar(props: NavbarPorpsType) {
@@ -38,6 +45,7 @@ export default function Navbar(props: NavbarPorpsType) {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const { theme } = useSelector((state: RootState) => state.theme);
   const showMessage = useSnackbar().showMessage;
 
   const open = Boolean(anchorEl);
@@ -52,6 +60,14 @@ export default function Navbar(props: NavbarPorpsType) {
     dispatch(logout());
     showMessage("Logged out successfully");
     handleClose();
+  };
+
+  const toggleThemeChange = () => {
+    if (theme === "light") {
+      dispatch(setTheme("dark"));
+    } else {
+      dispatch(setTheme("light"));
+    }
   };
 
   useEffect(() => {
@@ -83,7 +99,7 @@ export default function Navbar(props: NavbarPorpsType) {
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography component="div" sx={{ flexGrow: 1 }}>
             {APP_DETAILS.name}
           </Typography>
 
@@ -150,6 +166,14 @@ export default function Navbar(props: NavbarPorpsType) {
               Logout
             </MenuItem>
           </Menu>
+
+          <IconButton onClick={toggleThemeChange} sx={{ mr: 2 }}>
+            {theme === "light" ? (
+              <DarkMode color="primary" />
+            ) : (
+              <LightMode color="primary" />
+            )}
+          </IconButton>
 
           {user ? (
             <Tooltip title="Account settings">

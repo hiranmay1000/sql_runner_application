@@ -1,7 +1,11 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, Stack, Typography } from "@mui/material";
 import QueryList from "../components/QueryList";
+import { clearQueries } from "../redux/slice/query.slice";
+import { useDispatch } from "react-redux";
 
 function RecentQueries() {
+  const dispatch = useDispatch();
+
   return (
     <Box
       bgcolor="#f3f3f3"
@@ -25,7 +29,15 @@ function RecentQueries() {
         },
       }}
     >
-      <Typography fontWeight="bold">Recent Queries</Typography>
+      <Stack direction={"row"} justifyContent={"space-between"}>
+        <Typography fontWeight="bold">Recent Queries</Typography>
+        <Typography
+          onClick={() => dispatch(clearQueries())}
+          sx={{ cursor: "pointer", ":hover": { color: "blue" } }}
+        >
+          Clear
+        </Typography>
+      </Stack>
       <Divider sx={{ mb: 2 }} />
       <Box>
         <QueryList />

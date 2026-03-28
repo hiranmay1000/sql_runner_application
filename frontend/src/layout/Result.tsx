@@ -14,7 +14,7 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSnackbar } from "../context/SnackbarProvider";
+import { useSnackbar } from "../context/Snackbar/SnackbarProvider";
 import { fetchTableInfoAPI, fetchTablesAPI } from "../services/sqlService";
 import DataTable from "../components/DataTable";
 import QueryList from "../components/QueryList";
@@ -206,7 +206,7 @@ function Result(props: ResultsPropsType) {
           {/* Show selected table preview */}
           {selectedTable && (
             <>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom mb={2}>
                 Table Preview:{" "}
                 <Box
                   component="span"
@@ -216,6 +216,7 @@ function Result(props: ResultsPropsType) {
                     py: 0.3,
                     borderRadius: 1,
                     fontWeight: 500,
+                    fontSize: 18,
                   }}
                 >
                   {selectedTable.name}

@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slice/userAuth.slice";
 import queryReducer from "./slice/query.slice";
+import themeReducer from "./slice/theme.slice";
 import storage from "redux-persist/lib/storage";
 import persistReducer from "redux-persist/es/persistReducer";
 import { persistStore } from "redux-persist";
@@ -17,9 +18,16 @@ const queryPersistConfig = {
   whitelist: ["recentQueries"],
 };
 
+const themePersistConfig = {
+  key: "theme",
+  storage,
+  whitelist: ["theme"],
+};
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   query: persistReducer(queryPersistConfig, queryReducer),
+  theme: persistReducer(themePersistConfig, themeReducer),
 });
 
 export const store = configureStore({

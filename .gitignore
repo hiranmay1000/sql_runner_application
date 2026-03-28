@@ -23,6 +23,7 @@ env/
 # ⚡ Tools & Platforms
 .vercel/
 .vscode/
+test
 .idea/
 *.swp
 npm-debug.log*

@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { CloseOutlined } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { signupUser } from "../redux/slice/userAuth.slice";
-import { useSnackbar } from "../context/SnackbarProvider";
+import { useSnackbar } from "../context/Snackbar/SnackbarProvider";
 import { AppDispatch } from "../redux/store";
 
 interface SignupPropsType {
